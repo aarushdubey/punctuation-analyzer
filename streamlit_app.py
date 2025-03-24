@@ -94,66 +94,79 @@ def plot_bar_graph(row, selected_keys):
     plt.tight_layout()
     return fig
 
-# Streamlit app UI
-st.title("📑 Punctuation Analyzer for DOCX Files")
+# Streamlit App UI
+st.set_page_config(page_title="Punctuation as Grammatology")
+st.title("✒️ Punctuation as Grammatology")
 
-uploaded_files = st.file_uploader("Upload one or more .docx files", type="docx", accept_multiple_files=True)
+st.markdown("""
+### 📘 How to Use
+Upload `.doc` or `.docx` files and click **"Generate Punctuation Data"**. The application will generate values of different punctuation marks and visualize them in bar and line graphs.
+""")
+
+uploaded_files = st.file_uploader("Upload .docx files", type="docx", accept_multiple_files=True)
 
 if uploaded_files:
-    results = []
+    if st.button("📊 Generate Punctuation Data"):
+        results = []
 
-    for file in uploaded_files:
-        with st.spinner(f"Analyzing {file.name}..."):
-            text = extract_text(file)
-            punctuation = count_punctuation(text)
-            word_count = count_words(text)
+        for file in uploaded_files:
+            with st.spinner(f"Analyzing {file.name}..."):
+                text = extract_text(file)
+                punctuation = count_punctuation(text)
+                word_count = count_words(text)
 
-            result = {
-                "filename": file.name,
-                "word_count": word_count,
-                **punctuation
-            }
-            results.append(result)
+                result = {
+                    "filename": file.name,
+                    "word_count": word_count,
+                    **punctuation
+                }
+                results.append(result)
 
-    df = pd.DataFrame(results)
-    st.success("✅ Analysis Complete!")
+        df = pd.DataFrame(results)
+        st.success("✅ Analysis Complete!")
 
-    st.subheader("🔍 Punctuation Summary")
-    st.dataframe(df)
+        st.subheader("🔍 Punctuation Summary")
+        st.dataframe(df)
 
-    # CSV download
-    csv = df.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        "📥 Download CSV",
-        data=csv,
-        file_name="punctuation_summary.csv",
-        mime="text/csv"
-    )
+        csv = df.to_csv(index=False).encode("utf-8")
+        st.download_button("📥 Download CSV", data=csv, file_name="punctuation_summary.csv", mime="text/csv")
 
-    # Graph visualization
-    st.subheader("📊 Visualize Punctuation")
-    selected = st.multiselect(
-        "Select punctuation types to plot:",
-        options=PUNCTUATION_KEYS,
-        default=["commas", "full_stops", "question_marks"]
-    )
+        st.subheader("📈 Visualize Punctuation")
+        selected = st.multiselect("Select punctuation types to plot:", options=PUNCTUATION_KEYS, default=["commas", "full_stops", "question_marks"])
 
-    if selected:
-        if len(df) == 1:
-            # Single file uploaded → Bar graph
-            fig = plot_bar_graph(df.iloc[0], selected)
-        else:
-            # Multiple files uploaded → Line graph
-            fig = plot_line_graph(df, selected)
+        if selected:
+            if len(df) == 1:
+                fig = plot_bar_graph(df.iloc[0], selected)
+            else:
+                fig = plot_line_graph(df, selected)
 
-        st.pyplot(fig)
+            st.pyplot(fig)
 
-        # Download graph as PNG
-        buf = BytesIO()
-        fig.savefig(buf, format="png")
-        st.download_button(
-            "📥 Download Graph as PNG",
-            data=buf.getvalue(),
-            file_name="punctuation_graph.png",
-            mime="image/png"
-        )
+            buf = BytesIO()
+            fig.savefig(buf, format="png")
+            st.download_button("📥 Download Graph as PNG", data=buf.getvalue(), file_name="punctuation_graph.png", mime="image/png")
+
+st.markdown("""
+---
+### 📖 About
+**Punctuation as Grammatology** has emerged out of curiosity about a writer's usage of punctuation in fiction.
+
+As general discourse has it, punctuation is either disappearing or shrinking in the way written language works. For instance, the Internet is seen as a place where there is not much use for punctuation. The usage of punctuation has been shown to decrease in general. The usage of the full stop has increased in the last 200 years while the usage of the comma has decreased — a finding that suggests that writing moves towards simpler, closure-seeking or closure-affirming discourse.
+
+While these observations and findings about writing are true at a macro level as they speak to a huge corpus of texts, it is fascinating to engage with the micro or singular. After all, the general and the particular are forever engaged in a beautiful dance with each other.
+
+Through this web application, the experiment on one author's punctuation is being made available for others to explore punctuation in texts they wish to understand better.
+
+*Please note that the punctuation data generated by this application is not absolute and in itself does not mean anything. It is only meant to draw attention to punctuation as grammatology, a minor site within writing that is usually understood as logocentric, and focused on words.*
+
+---
+### 👥 Team
+- Soni Wadhwa  
+- Leena Lokhande  
+- Aarush Dubey  
+- Ayush Kumar  
+- Lucky Kumar
+
+### 📬 Contact
+For collaborations and/or feedback, write to: [wadhwa.soni@gmail.com](mailto:wadhwa.soni@gmail.com)
+""")
