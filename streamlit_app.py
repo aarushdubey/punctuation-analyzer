@@ -131,7 +131,17 @@ if uploaded_files:
     st.download_button("📥 Download CSV", data=csv, file_name="punctuation_summary.csv", mime="text/csv")
 
     st.subheader("📈 Visualize Punctuation")
-    selected = st.multiselect("Select punctuation types to plot:", options=PUNCTUATION_KEYS, default=["commas", "full_stops", "question_marks"])
+
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        select_all = st.checkbox("Select All")
+
+    with col2:
+        selected = st.multiselect(
+            "Select punctuation types to plot:",
+            options=PUNCTUATION_KEYS,
+            default=PUNCTUATION_KEYS if select_all else ["commas", "full_stops", "question_marks"]
+        )
 
     if selected:
         if len(df) == 1:
