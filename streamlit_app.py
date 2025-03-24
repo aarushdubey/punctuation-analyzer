@@ -160,12 +160,40 @@ Through this web application, the experiment on one author's punctuation is bein
 
 ---
 ### 👥 Team
-- Soni Wadhwa  
-- Leena Lokhande  
-- Aarush Dubey  
-- Ayush Kumar  
-- Lucky Kumar
 
+#### ▶️ Soni Wadhwa
+```python
+with st.expander("👩‍🏫 About Soni Wadhwa"):
+    st.markdown("""
+    Soni Wadhwa currently teaches Literature Studies at [SRM University, Andhra Pradesh](https://srmap.edu.in/faculty/dr-soni-wadhwa/). She works in digital humanities projects that support her larger research area of Sindhi Studies. Three of her digital projects are active. One is the [PG Sindhi Library](https://pgsindhi-library.sanchaya.net) which is a digital archive of Sindhi literature published in India. Another is the [Sindhi Halchal Archive](https://www.sindhihalchalarchive.in/about) which is dedicated to advertisements published in Sindhi books and magazines published in India. Her [Sindhi Sanchaya](https://www.sindhisanchaya.in/about) project is devoted to libraries and institutions that are home to Sindhi books and is funded by IIT Indore. She has recently received a grant from George Mason University (USA) for her research on the making of Sindhi literature as an Indian literature.
+    """)
+```
+
+#### ▶️ Leena Lokhande
+```python
+with st.expander("👩‍💻 About Leena Lokhande"):
+    st.write("Information coming soon...")
+```
+
+#### ▶️ Aarush Dubey
+```python
+with st.expander("👨‍💻 About Aarush Dubey"):
+    st.write("Information coming soon...")
+```
+
+#### ▶️ Ayush Kumar
+```python
+with st.expander("👨‍💻 About Ayush Kumar"):
+    st.write("Information coming soon...")
+```
+
+#### ▶️ Lucky Kumar
+```python
+with st.expander("👨‍💻 About Lucky Kumar"):
+    st.write("Information coming soon...")
+```
+
+---
 ### 📬 Contact
 For collaborations and/or feedback, write to: [wadhwa.soni@gmail.com](mailto:wadhwa.soni@gmail.com)
 """)
