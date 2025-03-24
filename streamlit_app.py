@@ -100,51 +100,50 @@ st.title("✒️ Punctuation as Grammatology")
 
 st.markdown("""
 ### 📘 How to Use
-Upload `.doc` or `.docx` files and click **"Generate Punctuation Data"**. The application will generate values of different punctuation marks and visualize them in bar and line graphs.
+Upload `.doc` or `.docx` files. The application will generate values of different punctuation marks and visualize them in bar and line graphs.
 """)
 
 uploaded_files = st.file_uploader("Upload .docx files", type="docx", accept_multiple_files=True)
 
 if uploaded_files:
-    if st.button("📊 Generate Punctuation Data"):
-        results = []
+    results = []
 
-        for file in uploaded_files:
-            with st.spinner(f"Analyzing {file.name}..."):
-                text = extract_text(file)
-                punctuation = count_punctuation(text)
-                word_count = count_words(text)
+    for file in uploaded_files:
+        with st.spinner(f"Analyzing {file.name}..."):
+            text = extract_text(file)
+            punctuation = count_punctuation(text)
+            word_count = count_words(text)
 
-                result = {
-                    "filename": file.name,
-                    "word_count": word_count,
-                    **punctuation
-                }
-                results.append(result)
+            result = {
+                "filename": file.name,
+                "word_count": word_count,
+                **punctuation
+            }
+            results.append(result)
 
-        df = pd.DataFrame(results)
-        st.success("✅ Analysis Complete!")
+    df = pd.DataFrame(results)
+    st.success("✅ Analysis Complete!")
 
-        st.subheader("🔍 Punctuation Summary")
-        st.dataframe(df)
+    st.subheader("🔍 Punctuation Summary")
+    st.dataframe(df)
 
-        csv = df.to_csv(index=False).encode("utf-8")
-        st.download_button("📥 Download CSV", data=csv, file_name="punctuation_summary.csv", mime="text/csv")
+    csv = df.to_csv(index=False).encode("utf-8")
+    st.download_button("📥 Download CSV", data=csv, file_name="punctuation_summary.csv", mime="text/csv")
 
-        st.subheader("📈 Visualize Punctuation")
-        selected = st.multiselect("Select punctuation types to plot:", options=PUNCTUATION_KEYS, default=["commas", "full_stops", "question_marks"])
+    st.subheader("📈 Visualize Punctuation")
+    selected = st.multiselect("Select punctuation types to plot:", options=PUNCTUATION_KEYS, default=["commas", "full_stops", "question_marks"])
 
-        if selected:
-            if len(df) == 1:
-                fig = plot_bar_graph(df.iloc[0], selected)
-            else:
-                fig = plot_line_graph(df, selected)
+    if selected:
+        if len(df) == 1:
+            fig = plot_bar_graph(df.iloc[0], selected)
+        else:
+            fig = plot_line_graph(df, selected)
 
-            st.pyplot(fig)
+        st.pyplot(fig)
 
-            buf = BytesIO()
-            fig.savefig(buf, format="png")
-            st.download_button("📥 Download Graph as PNG", data=buf.getvalue(), file_name="punctuation_graph.png", mime="image/png")
+        buf = BytesIO()
+        fig.savefig(buf, format="png")
+        st.download_button("📥 Download Graph as PNG", data=buf.getvalue(), file_name="punctuation_graph.png", mime="image/png")
 
 st.markdown("""
 ---
