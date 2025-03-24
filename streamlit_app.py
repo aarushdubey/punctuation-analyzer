@@ -84,13 +84,15 @@ def plot_line_graph(df, selected_keys):
 
 # Plot bar graph (for single document)
 def plot_bar_graph(row, selected_keys):
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(12, 6))
     counts = [row[key] for key in selected_keys]
-    ax.bar(selected_keys, counts)
+    labels = [key.replace("_", " ").title() for key in selected_keys]
+    ax.bar(labels, counts)
     ax.set_title(f"Punctuation Count for: {row['filename']}", fontsize=16)
     ax.set_xlabel("Punctuation Type", fontsize=12)
     ax.set_ylabel("Count", fontsize=12)
-    ax.tick_params(axis='x', labelrotation=45)
+    ax.tick_params(axis='x', labelrotation=45, labelsize=10)
+    plt.xticks(ha='right')
     plt.tight_layout()
     return fig
 
