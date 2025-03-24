@@ -64,10 +64,9 @@ def count_punctuation(content):
 def count_words(content):
     return len(re.findall(r"\b\w+\b", content))
 
-# Plot line graph with different lines for each selected punctuation type
+# Plot line graph
 def plot_line_graph(df, selected_keys):
     fig, ax = plt.subplots(figsize=(12, 6))
-
     for key in selected_keys:
         ax.plot(df["filename"], df[key], marker='o', label=key)
 
@@ -75,20 +74,25 @@ def plot_line_graph(df, selected_keys):
     ax.set_xlabel("Document", fontsize=12)
     ax.set_ylabel("Count", fontsize=12)
     ax.legend(fontsize=10)
-
-    # Improve x-axis label formatting
     ax.set_xticks(range(len(df["filename"])))
     ax.set_xticklabels(
         [label.replace(".docx", "").replace("_", " ") for label in df["filename"]],
-        rotation=25,
-        ha='right',
-        fontsize=9,
-        wrap=True
+        rotation=25, ha='right', fontsize=9, wrap=True
     )
-
     plt.tight_layout()
     return fig
 
+# Plot bar graph (for single document)
+def plot_bar_graph(row, selected_keys):
+    fig, ax = plt.subplots(figsize=(10, 5))
+    counts = [row[key] for key in selected_keys]
+    ax.bar(selected_keys, counts)
+    ax.set_title(f"Punctuation Count for: {row['filename']}", fontsize=16)
+    ax.set_xlabel("Punctuation Type", fontsize=12)
+    ax.set_ylabel("Count", fontsize=12)
+    ax.tick_params(axis='x', labelrotation=45)
+    plt.tight_layout()
+    return fig
 
 # Streamlit app UI
 st.title("📑 Punctuation Analyzer for DOCX Files")
@@ -126,8 +130,8 @@ if uploaded_files:
         mime="text/csv"
     )
 
-    # Line graph selection
-    st.subheader("📈 Visualize Punctuation Across Documents")
+    # Graph visualization
+    st.subheader("📊 Visualize Punctuation")
     selected = st.multiselect(
         "Select punctuation types to plot:",
         options=PUNCTUATION_KEYS,
@@ -135,7 +139,13 @@ if uploaded_files:
     )
 
     if selected:
-        fig = plot_line_graph(df, selected)
+        if len(df) == 1:
+            # Single file uploaded → Bar graph
+            fig = plot_bar_graph(df.iloc[0], selected)
+        else:
+            # Multiple files uploaded → Line graph
+            fig = plot_line_graph(df, selected)
+
         st.pyplot(fig)
 
         # Download graph as PNG
