@@ -195,5 +195,5 @@ with st.expander("👨‍💻 About Lucky Kumar"):
 st.markdown("""
 ---
 ### 📬 Contact
-For collaborations and/or feedback, write to: [wadhwa.soni@gmail.com](mailto:wadhwa.soni@gmail.com)
+For collaborations and/or feedback, write to: [punctuationasgrammatology@gmail.com](mailto:punctuationasgrammatology@gmail.com)
 """)
